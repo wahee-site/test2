@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish UPI QR Code Generator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ** NEW ** Advanced QR Code generation library for styling -->
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom class for the QR code container to ensure size */
+        #qrcode {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+        }
+        /* Style for the color input previews */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 md:p-8 transform transition-all">
+        <header class="text-center mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">Stylish UPI QR Generator</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Create custom, branded payment QR codes.</p>
+        </header>
+
+        <main>
+            <!-- Main Details -->
+            <div class="space-y-4">
+                <div>
+                    <label for="upiId" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">UPI ID</label>
+                    <input type="text" id="upiId" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500" placeholder="yourname@bank" required>
+                </div>
+                <div>
+                    <label for="amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Amount (₹)</label>
+                    <input type="number" id="amount" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500" placeholder="100.00" required step="0.01">
+                </div>
+            </div>
+
+            <!-- Styling Options (Collapsible) -->
+            <details class="mt-6 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                <summary class="font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">Styling Options</summary>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <!-- Gradient Start Color -->
+                    <div class="flex items-center space-x-2">
+                        <input type="color" id="gradientStart" value="#16a34a">
+                        <label for="gradientStart" class="text-sm font-medium text-slate-600 dark:text-slate-300">Gradient Start</label>
+                    </div>
+                    <!-- Gradient End Color -->
+                    <div class="flex items-center space-x-2">
+                        <input type="color" id="gradientEnd" value="#ca8a04">
+                        <label for="gradientEnd" class="text-sm font-medium text-slate-600 dark:text-slate-300">Gradient End</label>
+                    </div>
+                    <!-- Background Color -->
+                    <div class="flex items-center space-x-2">
+                        <input type="color" id="backgroundColor" value="#ffffff">
+                        <label for="backgroundColor" class="text-sm font-medium text-slate-600 dark:text-slate-300">Background</label>
+                    </div>
+                    <!-- Dot Style -->
+                    <div>
+                        <label for="dotStyle" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Dot Style</label>
+                        <select id="dotStyle" class="w-full text-sm px-2 py-1 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
+                            <option value="rounded">Rounded</option>
+                            <option value="dots">Dots</option>
+                            <option value="classy">Classy</option>
+                            <option value="classy-rounded">Classy Rounded</option>
+                            <option value="square">Square</option>
+                            <option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="mt-4">
+                    <label for="logoUrl" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Logo URL (Optional)</label>
+                    <input type="text" id="logoUrl" class="w-full text-sm px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="https://example.com/logo.png">
+                </div>
+            </details>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button type="button" id="generateBtn" class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 shadow-md hover:shadow-lg transition">
+                    Generate QR Code
+                </button>
+                <button type="button" id="downloadBtn" class="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 shadow-md hover:shadow-lg transition hidden">
+                    Download PNG
+                </button>
+            </div>
+            
+            <!-- QR Code Display Area -->
+            <div class="mt-6 min-h-[280px] flex items-center justify-center">
+                 <div id="qrcode"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const qrContainer = document.getElementById('qrcode');
+        
+        // Form Inputs
+        const upiIdInput = document.getElementById('upiId');
+        const amountInput = document.getElementById('amount');
+        const gradientStartInput = document.getElementById('gradientStart');
+        const gradientEndInput = document.getElementById('gradientEnd');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const dotStyleSelect = document.getElementById('dotStyle');
+        const logoUrlInput = document.getElementById('logoUrl');
+
+        let qrCodeInstance = null;
+
+        const generateQrCode = () => {
+            const upiId = upiIdInput.value.trim();
+            const amount = amountInput.value.trim();
+
+            if (!upiId || !amount) {
+                alert('Please enter your UPI ID and the Amount.');
+                return;
+            }
+
+            // Construct the UPI string
+            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=Recipient&am=${encodeURIComponent(amount)}&cu=INR`;
+            
+            // Get styling options from the form
+            const gradientStart = gradientStartInput.value;
+            const gradientEnd = gradientEndInput.value;
+            const backgroundColor = backgroundColorInput.value;
+            const dotStyle = dotStyleSelect.value;
+            const logoUrl = logoUrlInput.value.trim();
+
+            // QR Code Styling Options object
+            const options = {
+                width: 280,
+                height: 280,
+                data: upiString,
+                image: logoUrl,
+                dotsOptions: {
+                    type: dotStyle,
+                    gradient: {
+                        type: 'linear', // can be 'linear' or 'radial'
+                        rotation: 0.785, // 45 degrees in radians
+                        colorStops: [
+                            { offset: 0, color: gradientStart },
+                            { offset: 1, color: gradientEnd }
+                        ]
+                    }
+                },
+                backgroundOptions: {
+                    color: backgroundColor,
+                },
+                imageOptions: {
+                    crossOrigin: 'anonymous', // Important for using logos from other domains
+                    margin: 10
+                },
+                cornersSquareOptions: {
+                    type: 'extra-rounded',
+                    gradient: {
+                        type: 'linear',
+                        rotation: 0.785,
+                         colorStops: [
+                            { offset: 0, color: gradientStart },
+                            { offset: 1, color: gradientEnd }
+                        ]
+                    }
+                },
+                 cornersDotOptions: {
+                    type: 'dot'
+                }
+            };
+            
+            // Create or update the QR code
+            if (qrCodeInstance) {
+                qrCodeInstance.update(options);
+            } else {
+                qrCodeInstance = new QRCodeStyling(options);
+                qrContainer.innerHTML = ''; // Clear previous content
+                qrCodeInstance.append(qrContainer);
+            }
+
+            // Show the download button
+            downloadBtn.classList.remove('hidden');
+        };
+
+        const downloadQrCode = () => {
+            if (!qrCodeInstance) return;
+            qrCodeInstance.download({ name: 'upi-payment-qr', extension: 'png' });
+        };
+        
+        // Event Listeners
+        generateBtn.addEventListener('click', generateQrCode);
+        downloadBtn.addEventListener('click', downloadQrCode);
+        
+        // Real-time updates when styles change, but only if a QR code already exists
+        [gradientStartInput, gradientEndInput, backgroundColorInput, dotStyleSelect, logoUrlInput].forEach(input => {
+            input.addEventListener('input', () => {
+                if (qrCodeInstance) {
+                    generateQrCode();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
+
