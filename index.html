@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stylish UPIi QR Code Generator by</title>
+    <title>Stylish UPI QR Code Generator</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- ** NEW ** Advanced QR Code generation library for styling -->
@@ -93,10 +93,6 @@
                         </select>
                     </div>
                 </div>
-                 <div class="mt-4">
-                    <label for="logoUrl" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Logo URL (Optional)</label>
-                    <input type="text" id="logoUrl" class="w-full text-sm px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white" placeholder="https://example.com/logo.png">
-                </div>
             </details>
 
             <!-- Action Buttons -->
@@ -130,7 +126,6 @@
         const gradientEndInput = document.getElementById('gradientEnd');
         const backgroundColorInput = document.getElementById('backgroundColor');
         const dotStyleSelect = document.getElementById('dotStyle');
-        const logoUrlInput = document.getElementById('logoUrl');
 
         let qrCodeInstance = null;
 
@@ -151,14 +146,12 @@
             const gradientEnd = gradientEndInput.value;
             const backgroundColor = backgroundColorInput.value;
             const dotStyle = dotStyleSelect.value;
-            const logoUrl = logoUrlInput.value.trim();
 
             // QR Code Styling Options object
             const options = {
                 width: 280,
                 height: 280,
                 data: upiString,
-                image: logoUrl,
                 dotsOptions: {
                     type: dotStyle,
                     gradient: {
@@ -172,10 +165,6 @@
                 },
                 backgroundOptions: {
                     color: backgroundColor,
-                },
-                imageOptions: {
-                    crossOrigin: 'anonymous', // Important for using logos from other domains
-                    margin: 10
                 },
                 cornersSquareOptions: {
                     type: 'extra-rounded',
@@ -216,7 +205,7 @@
         downloadBtn.addEventListener('click', downloadQrCode);
         
         // Real-time updates when styles change, but only if a QR code already exists
-        [gradientStartInput, gradientEndInput, backgroundColorInput, dotStyleSelect, logoUrlInput].forEach(input => {
+        [gradientStartInput, gradientEndInput, backgroundColorInput, dotStyleSelect].forEach(input => {
             input.addEventListener('input', () => {
                 if (qrCodeInstance) {
                     generateQrCode();
@@ -227,6 +216,4 @@
     </script>
 </body>
 </html>
-
-
 
